@@ -33,6 +33,18 @@ def index():
     """List all available api routes."""
     return (
         f"Available Routes:<br/>"
-        f"/api/v1.0/names<br/>"
-        f"/api/v1.0/passengers"
-    )return
+        f"/api/v1.0/precipitation<br/>"
+        f"/api/v1.0/stations<br/>"
+        f"/api/v1.0/tobs<br/>"
+        f"/api/v1.0/<start><br/>"
+        f"/api/v1.0/<start>/<end>"
+    )
+
+@app.route("/api/v1.0/precipitation<br/>")
+def precipitation():
+    #create session link from Python to the Database
+    session = Session(engine)
+
+    """Return a list of dates and precipitation"""
+    # Query dates and precipitation
+
