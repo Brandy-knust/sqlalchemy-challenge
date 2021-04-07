@@ -47,4 +47,15 @@ def precipitation():
 
     """Return a list of dates and precipitation"""
     # Query dates and precipitation
+    precipitation = session.query(Measurement.date, Measurement.prcp).all()
 
+    session.close()
+
+    precip_dates = list(np.ravel(precipitation))
+
+    return jsonify(precip_dates)
+
+#@app.route()
+
+if __name__ == '__climate__':
+    app.run(debug=True)
