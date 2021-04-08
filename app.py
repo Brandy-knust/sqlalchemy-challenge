@@ -40,7 +40,7 @@ def index():
         f"/api/v1.0/<start>/<end>"
     )
 
-@app.route("/api/v1.0/precipitation<br/>")
+@app.route("/api/v1.0/precipitation")
 def precipitation():
     #create session link from Python to the Database
     session = Session(engine)
@@ -55,7 +55,30 @@ def precipitation():
 
     return jsonify(precip_dates)
 
-#@app.route()
+@app.route("/api/v1.0/stations")
+def stations(): 
+
+    #create session link from Python to the Database
+    session = Session(engine)
+    
+    """Return a list of Stations"""
+    #JSON list of stations
+    station_info=session.query(Station).fetch_all()
+    session.close()
+
+    station_data = list(np.ravel(station_info))
+    return jsonify(station_data)
+
+@app.route("/api/v1.0/tobs")
+def tobs():
+
+    #create session link from Python to the Database
+    session = Session(engine)
+    
+    """Return a JSON list of dates and temperature for the most active station over the last year of data"""
+
+    #JSON data
+    temp = session.query(Measurement)
 
 if __name__ == '__climate__':
     app.run(debug=True)
