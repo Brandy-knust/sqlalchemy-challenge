@@ -64,12 +64,12 @@ def stations():
     
     """Return a list of Stations"""
     #JSON list of stations
-    station_info=session.query(Station).all()
-    session.close()
+    station_info=session.query(Station.station).all()
+    
 
-    station_data = list(np.ravel(station_info))
+    station_data = list(station_info)
     return jsonify(station_data)
-
+    session.close()
 @app.route("/api/v1.0/tobs")
 def tobs():
 
