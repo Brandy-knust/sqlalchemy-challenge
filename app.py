@@ -1,5 +1,6 @@
 # 1. imports
 import numpy as np
+import pandas as pd
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -63,28 +64,6 @@ def stations():
     
     """Return a list of Stations"""
     #JSON list of stations
-    station_info=session.query(Station).fetch_all()
-    session.close()
-
-    station_data = list(np.ravel(station_info))
-    return jsonify(station_data)
-
-@app.route("/api/v1.0/tobs")
-def tobs():
-
-    #create session link from Python to the Database
-    session = Session(engine)
-    
-    """Return a JSON list of dates and temperature for the most active station over the last year of data"""
-
-    #JSON data
-    temp = session.query(Measurement)
-
-    #create session link from Python to the Database
-    session = Session(engine)
-    
-    """Return a list of Stations"""
-    #JSON list of stations
     station_info=session.query(Station).all()
     session.close()
 
@@ -100,7 +79,12 @@ def tobs():
     """Return a JSON list of dates and temperature for the most active station over the last year of data"""
 
     #JSON data
-    temp = session.query(Measurement)
+    active = session.query(func.count(Measurement.station), Measurement.station).group_by(Measurement.station).order_by(func.count(Measurement.station).desc()).first()
+    year_active=pd.read_sql('SELECT tobs, date FROM Measurement WHERE station = "USC00519281"', engine.connect())
+    session.close()
+    year_data = list(np.ravel(year_active))
+    return jsonify(year_data)
+    
 
 @app.route("/api/v1.0/<start>")
 def temp_start(start):
